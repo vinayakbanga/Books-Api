@@ -207,6 +207,53 @@ booky.get("/publications/:id", (req,res) =>{
     return res.json({Publications: getSpecificPublication});
   });
     
+
+//POST
+
+/*
+Route            /book/new
+Description      Add new books
+Access           PUBLIC
+Parameter        NONE
+Methods          POST
+*/
+
+booky.post("/book/new",(req,res) => {
+  const newBook = req.body;
+  database.books.push(newBook);
+  return res.json({updatedBooks: database.books});
+});
+
+/*
+Route            /author/new
+Description      Add new authors
+Access           PUBLIC
+Parameter        NONE
+Methods          POST
+*/
+
+booky.post("/author/new",(req,res) => {
+  const newAuthor = req.body;
+  database.author.push(newAuthor);
+  return res.json(database.author);
+});
+
+/*
+Route            /publication/new
+Description      Add new publicaton
+Access           PUBLIC
+Parameter        NONE
+Methods          POST
+*/
+
+booky.post("/publication/new",(req,res) => {
+  const newPublication = req.body;
+  database.publication.push(newPublication);
+  return res.json(database.publication);
+});
+
+
+
     
     
     booky.listen(3000,()=>{

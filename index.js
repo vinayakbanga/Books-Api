@@ -253,6 +253,99 @@ booky.post("/publication/new",(req,res) => {
 });
 
 
+//***********Put*************** */
+/*
+Route            /publication/update/book
+Description      Update or Add new Publication
+Access           PUBLIC
+Parameter        isbn
+Methods          Put
+*/
+
+booky.put("/publication/update/book/:isbn",(req,res) =>{
+//update the publication database
+database.publication.forEach((pub)=>{ //forEach is used when we donot want to return any thing just we want only to update the content
+  if(pub.id === req.body.pubId){
+    return pub.books.push(req.params.isbn);
+        
+  }
+})     
+//update the book Database
+     database.books.forEach((book) =>{
+       if(book.ISBN === req.params.isbn){
+         book.publications = req.body.pubId;
+         return;
+       }
+     })  
+     return res.json(
+       {
+         books: database.books,
+         publication: database.publication,
+         messge: "Successfully Updated"
+       }
+     )                
+
+
+})
+/***********Delete*************** */
+/*
+Route            /book/delete
+Description      Delete a book
+Access           PUBLIC
+Parameter        isbn
+Methods          Delete
+*/
+booky.delete("/book/delete/:isbn",(req,res) => {
+  //whichever boo that doesnot match,send it to updatedbookdatabase array
+  // and rest will be filtered out(deleted )
+
+  const updatedBookDatabase = database.books.filter(
+    (book) => book.ISBN !== req.params.isbn
+  )
+  database.books = updatedBookDatabase;
+  
+  return res.json({books: database.books})
+
+});
+/*
+Route            /book/delete/author
+Description      Delete an author from book and vice versa
+Access           PUBLIC
+Parameter        isbn and authorId
+Methods          Delete
+*/
+booky.delete("/book/delete/author/:isbn/:authorId",(req,res)=>{
+  //update the book database
+  database.books.forEach((book)=>{
+    if(book.ISBN === req.params.isbn){
+      const newAuthorList=book.author.filter(
+        (eachAuthor) => eachAuthor !== parseInt(req.params.authorId)
+      );
+      book.author= newAuthorList;
+      return;
+    }
+  })
+  
+  
+  //update the author databadse
+  database.author.forEach((eachAuthor)=>{
+    if(eachAuthor.id === parseInt(req.params.authorId)){
+      const newBookList = eachAuthor.books.filter(
+        (book)=> book !== req.params.isbn
+      );
+      eachAuthor.books= newBookList;//new book list me delet ko chod ke baki sari books hai
+      return;
+    }
+  })
+  return res.json({
+    book:database.books,
+    author:database.author,
+    messge : "Author was deleted"
+  });
+
+
+})
+
 
     
     

@@ -45,3 +45,9 @@
 //1. Delete a book - DONE
 //2. Delete author from book - UR TASK
 //3. Delete author from book and related book from author - 
+// mongo
+//schema is a blue print how the data is constructued
+//mongoosee has schema but mongo db not
+//mongosee helps in validation,check in relationship with other data
+//model- document model of model db
+//workflow->schema->model->use
